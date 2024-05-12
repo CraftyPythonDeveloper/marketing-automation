@@ -2,10 +2,10 @@ class DatabaseConfig:
     DB_CONNECTION_URI = "sqlite:///marketing.db"
 
     # MS SQL connection string
-    # SERVER_NAME = "localhost"
+    # SERVER_NAME = ""
     # DATABASE_NAME = ""
     # DRIVER_NAME = ""
-    # DB_CONNECTION_URI = f'mssql+pyodbc://{SERVER}/{DATABASE}?driver={DRIVER}'
+    # DB_CONNECTION_URI = f'mssql+pyodbc://{SERVER_NAME}/{DATABASE_NAME}?driver={DRIVER_NAME}'
 
 
 class WhatsappConfig(DatabaseConfig):
@@ -16,8 +16,8 @@ class WhatsappConfig(DatabaseConfig):
     # User config, please update it as per your requirements.
     WA_DAILY_LIMIT = 450
     WHATSAPP_MESSAGE = "This is a test message"
-    WHATSAPP_ATTACHMENT = r"C:\Users\Anon\Downloads\test.png"  # only replace the path, DO NOT REMOVE r"
-    # WHATSAPP_ATTACHMENT = None    # if you don't want attachment, then you can keep this None
+    # WHATSAPP_ATTACHMENT = r"C:\Users\Anon\Downloads\test.png"  # only replace the path, DO NOT REMOVE r"
+    WHATSAPP_ATTACHMENT = None    # if you don't want attachment, then you can keep this None
 
 
 class EmailConfig(DatabaseConfig):
@@ -28,12 +28,7 @@ class EmailConfig(DatabaseConfig):
 
     # User config, please update it as per your requirements.
     EMAIL_DAILY_LIMIT = 100
-
-    # generate email templates from any of below website
-    # 1. https://wordtohtml.net/site/index
-    # 2. https://www.textfixer.com/html/convert-email-to-html.php
-    # 3. https://www.tiny.cloud/
     EMAIL_TEMPLATE_NAME = "test_email_template.html"
     SUBJECT = "This is test email"
-    ATTACHMENT_PATH = r"C:\Users\Anon\Downloads\test.png"    # Only replace the path, DO NOT REMOVE r"
-    # WHATSAPP_ATTACHMENT = None    # if you don't want attachment, then you can keep this None
+    # ATTACHMENT_PATH = r"C:\Users\Anon\Downloads\test.png"    # Only replace the path, DO NOT REMOVE r"
+    ATTACHMENT_PATH = None    # if you don't want attachment, then you can keep this None

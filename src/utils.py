@@ -113,13 +113,14 @@ def send_email(smtp_server, to):
     html_content = MIMEText(email_body, 'html')
     msg.attach(html_content)
 
-    for attachment in EmailConfig.ATTACHMENT_PATH.split(";"):
-        with open(attachment, "rb") as file:
-            part = MIMEBase("application", "octet-stream")
-            part.set_payload(file.read())
-        encoders.encode_base64(part)
-        part.add_header("Content-Disposition", f"attachment; filename= {attachment}")
-        msg.attach(part)
+    if EmailConfig.ATTACHMENT_PATH:
+        for attachment in EmailConfig.ATTACHMENT_PATH.split(";"):
+            with open(attachment, "rb") as file:
+                part = MIMEBase("application", "octet-stream")
+                part.set_payload(file.read())
+            encoders.encode_base64(part)
+            part.add_header("Content-Disposition", f"attachment; filename= {attachment}")
+            msg.attach(part)
 
     smtp_server.send_message(msg)
     return True
