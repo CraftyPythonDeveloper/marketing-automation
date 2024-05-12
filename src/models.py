@@ -19,30 +19,11 @@ class WhatsappUserData(base):
     updated_at = db.Column(db.String(50), nullable=True)
 
 
-class WhatsappMessageTable(base):
-    __tablename__ = "whatsapp_message"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    message = db.Column(db.Text, nullable=False)
-    attachment = db.Column(db.String(500), nullable=True)
-    created_at = db.Column(db.DateTime, server_default=func.now())
-    updated_at = db.Column(db.String(50), nullable=True)
-
-
 class EmailUserData(base):
     __tablename__ = "email_user_data"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(120), unique=True, nullable=True)
     status = db.Column(db.String(50), server_default="Not Sent", nullable=False)
-    created_at = db.Column(DateTime, server_default=func.now())
-    updated_at = db.Column(db.String(50), nullable=True)
-
-
-class EmailMessageTable(base):
-    __tablename__ = "email_message"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    subject = db.Column(db.String(500), nullable=False)
-    body = db.Column(db.Text, nullable=False)
-    attachment = db.Column(db.String(500), nullable=True)
     created_at = db.Column(DateTime, server_default=func.now())
     updated_at = db.Column(db.String(50), nullable=True)
 

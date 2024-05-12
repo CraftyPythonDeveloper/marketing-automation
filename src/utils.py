@@ -1,13 +1,24 @@
+import os
+from pathlib import Path
 import time
 from dataclasses import dataclass, field
 from datetime import date
 import random
 
-from selenium.webdriver import Chrome, ChromeOptions
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+from undetected_chromedriver import Chrome
+from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.by import By
 
-from models import WhatsappUserData
-from config import WhatsappConfig
+from config import WhatsappConfig, EmailConfig
+
+
+WRK_DIR = Path(__file__).parent
 
 
 @dataclass
@@ -21,9 +32,16 @@ class WhatsappVariables:
     img_box_xpath2: str = "//input[@accept='*']"
     invalid_phone_number_msg: str = "//div[text()='Phone number shared via url is invalid.']"
     allowed_file_ext: list = field(default_factory=lambda: [".png", ".jpeg", ".jpg", ".gif", ".jfif", ".mp4", ".3gp"])
-    not_sent_status = "Not Sent"
-    sent_status = "Sent"
-    invalid_status = "Invalid"
+    not_sent_status: str = "Not Sent"
+    sent_status: str = "Sent"
+    invalid_status: str = "Invalid"
+
+
+@dataclass
+class EmailVariables:
+    not_sent_status: str = "Not Sent"
+    sent_status: str = "Sent"
+    invalid_status: str = "Invalid"
 
 
 def random_sleep(min_time: float = 1, max_time: float = 5) -> bool:
@@ -43,13 +61,14 @@ def find_element_with_timeout(driver, by, locator, timeout=120):
 
 
 def whatsapp_login():
-    profile_path = r"C:\Users\Anon\AppData\Local\BraveSoftware\Brave-Browser\User Data\Default"
+    profile_path = os.path.join(WRK_DIR, "chrome_profiles", WhatsappConfig.CHROME_PROFILE_NAME)
     wa_variables = WhatsappVariables()
     chrome_options = ChromeOptions()
     chrome_options.add_argument('--user-data-dir=' + profile_path)
     chrome_options.add_argument("--disable-notifications")
     chrome_options.add_argument("--disable-popup-blocking")
     driver = Chrome(options=chrome_options)
+    driver.maximize_window()
     driver.get(WhatsappConfig.WA_WEB_URL)
     print("Please scan the QR code to login into whatsapp web.")
 
@@ -63,13 +82,44 @@ def whatsapp_login():
     return driver
 
 
-def validate_daily_limit(session, log=True):
-    today_count = session.query(WhatsappUserData).filter(WhatsappUserData.updated_at == date.today().strftime('%Y-%m-%d'),
-                                                         WhatsappUserData.status == "Sent").count()
-    if today_count > WhatsappConfig.WA_DAILY_LIMIT:
-        print(f"You have already sent {today_count} messages today. Please continue tomorrow to avoid getting blocked")
+def validate_daily_limit(session, model, status, daily_limit, log=True):
+    today_count = session.query(model).filter(model.updated_at == date.today().strftime('%Y-%m-%d'),
+                                              model.status == status).count()
+
+    if today_count > daily_limit:
+        print(f"Set limit of {daily_limit} exceeded. Please try again tomorrow")
         return False
     if log:
         print(f"You have sent {today_count} messages today.")
     return True
 
+
+def login_email():
+    smtp_server = smtplib.SMTP_SSL(EmailConfig.HOST, EmailConfig.SMTP_PORT)
+    smtp_server.login(EmailConfig.SMTP_EMAIL, EmailConfig.SMTP_PASSWORD)
+    return smtp_server
+
+
+def send_email(smtp_server, to):
+    msg = MIMEMultipart()
+    msg['From'] = EmailConfig.SMTP_EMAIL
+    msg['To'] = to
+    msg['Subject'] = EmailConfig.SUBJECT
+
+    template_path = os.path.join(WRK_DIR, "email_templates", EmailConfig.EMAIL_TEMPLATE_NAME)
+    with open(template_path, "r", encoding="UTF-8") as fp:
+        email_body = fp.read()
+
+    html_content = MIMEText(email_body, 'html')
+    msg.attach(html_content)
+
+    for attachment in EmailConfig.ATTACHMENT_PATH.split(";"):
+        with open(attachment, "rb") as file:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(file.read())
+        encoders.encode_base64(part)
+        part.add_header("Content-Disposition", f"attachment; filename= {attachment}")
+        msg.attach(part)
+
+    smtp_server.send_message(msg)
+    return True
