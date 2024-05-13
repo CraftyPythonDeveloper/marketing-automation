@@ -36,7 +36,7 @@ if __name__ == '__main__':
             random_sleep()
             print(f"Message sent to {user.email}")
         except Exception as e:
-            print(f"Invalid Phone number {user.email}")
+            print(f"Invalid Email Address: {user.email}")
             user.status = email_variables.invalid_status
             user.updated_at = date.today().strftime('%Y-%m-%d')
             session.commit()
