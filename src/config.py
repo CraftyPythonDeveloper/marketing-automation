@@ -15,7 +15,7 @@ class WhatsappConfig(DatabaseConfig):
 
     # User config, please update it as per your requirements.
     WA_DAILY_LIMIT = 450
-    WHATSAPP_MESSAGE = "This is a test message"
+    WHATSAPP_MESSAGE = """This is a test message"""
     # WHATSAPP_ATTACHMENT = r"C:\Users\Anon\Downloads\test.png"  # only replace the path, DO NOT REMOVE r"
     WHATSAPP_ATTACHMENT = None    # if you don't want attachment, then you can keep this None
 
