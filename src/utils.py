@@ -82,6 +82,22 @@ def whatsapp_login():
     return driver
 
 
+def paste_content(driver, el, content):
+    # https://stackoverflow.com/questions/51706256/sending-emojis-with-seleniums-send-keys
+    driver.execute_script(
+      f'''
+        const text = `{content}`;
+        const dataTransfer = new DataTransfer();
+        dataTransfer.setData('text', text);
+        const event = new ClipboardEvent('paste', {{
+          clipboardData: dataTransfer,
+          bubbles: true
+        }});
+        arguments[0].dispatchEvent(event)
+    ''', el)
+    return True
+
+
 def validate_daily_limit(session, model, status, daily_limit, log=True):
     today_count = session.query(model).filter(model.updated_at == date.today().strftime('%Y-%m-%d'),
                                               model.status == status).count()

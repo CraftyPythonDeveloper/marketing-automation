@@ -29,7 +29,7 @@ To run the script follow the below mentioned steps:
   - Then in WhatsappConfig class, update the config according to your requirements. Below are details about variables.
     - **CHROME_PROFILE_NAME** - (Optional) This gives you ability to control multiple profiles which can hold different logins and environments. You can leave this as it is.
     - **WA_DAILY_LIMIT** - (Optional) The daily limit, script will check if your messages for a day cross this limit and if it does it will stop. This helps avoid sending unlimited messages, which can get your account blocked. 
-    - **WHATSAPP_MESSAGE** - (Required) This is the message which you want to send to users. TO ad multi-line message, add \<br>, so that script can write multi-line messages. if you want more formatting then visit https://wordtohtml.net/site/index and remember to add \<br> for multi-line.
+    - **WHATSAPP_MESSAGE** - (Required) This is the message which you want to send to users. if you want more formatting then visit https://whatsapp-editor.firebaseapp.com
     - **WHATSAPP_ATTACHMENT** - (Optional) If you also want to send the attachment with the message, then just provide the attachment path. Make sure that path is exact format of r"your_path". starts with r.
 - Once config file is updated correctly, you can run the script by typing ```python whatsapp_automation.py``` for sending messages to whatsapp users.
 - An table with name whatsapp_user_data will be created if you run the script first time. now upload the phone numbers in this table, so that script can start sending messages to those numbers.

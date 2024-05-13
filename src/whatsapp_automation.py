@@ -1,13 +1,11 @@
 import sys
-import time
 import os
 from datetime import date
-
-from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from config import WhatsappConfig
 from models import (get_db_session, WhatsappUserData,)
-from utils import (random_sleep, WhatsappVariables, whatsapp_login, validate_daily_limit, find_element_with_timeout,)
+from utils import (random_sleep, WhatsappVariables, whatsapp_login, validate_daily_limit, find_element_with_timeout,
+                   paste_content,)
 
 
 if __name__ == "__main__":
@@ -67,10 +65,7 @@ if __name__ == "__main__":
             chat_box = driver.find_element(By.XPATH, whatsapp_variables.type_here_box)
             chat_box.click()
             random_sleep()
-            for msg in WhatsappConfig.WHATSAPP_MESSAGE.split(whatsapp_variables.new_line_delimiter):
-                chat_box.send_keys(msg.strip())
-                time.sleep(0.5)
-                chat_box.send_keys(Keys.ALT + Keys.ENTER)
+            paste_content(driver, chat_box, WhatsappConfig.WHATSAPP_MESSAGE)
 
             random_sleep()
             if WhatsappConfig.WHATSAPP_ATTACHMENT:
