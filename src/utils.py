@@ -102,7 +102,7 @@ def validate_daily_limit(session, model, status, daily_limit, log=True):
     today_count = session.query(model).filter(model.updated_at == date.today().strftime('%Y-%m-%d'),
                                               model.status == status).count()
 
-    if today_count > daily_limit:
+    if today_count >= daily_limit:
         print(f"Set limit of {daily_limit} exceeded. Please try again tomorrow")
         return False
     if log:
