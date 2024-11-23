@@ -24,10 +24,10 @@ WRK_DIR = Path(__file__).parent
 @dataclass
 class WhatsappVariables:
     verify_login_xpath: str = '//div[text()="Search"]'
-    type_here_box: str = "//div[@aria-label='Type a message']"
+    type_here_box: str = "//div[@aria-label='Type a message'] | //div[@aria-placeholder='Type a message']"
     send_msg_xpath: str = "//span[@data-testid='send' or @data-icon='send']"
     new_line_delimiter: str = "<br>"
-    attachment_box_xpath: str = "//div[@aria-label='Attach']"
+    attachment_box_xpath: str = "//div[@aria-label='Attach'] | //button[@aria-label='Attach']"
     img_box_xpath1: str = "//input[@accept='image/*,video/mp4,video/3gpp,video/quicktime']"
     img_box_xpath2: str = "//input[@accept='*']"
     invalid_phone_number_msg: str = "//div[text()='Phone number shared via url is invalid.']"
