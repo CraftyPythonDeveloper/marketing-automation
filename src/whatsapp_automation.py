@@ -69,7 +69,11 @@ if __name__ == "__main__":
 
             random_sleep()
             if WhatsappConfig.WHATSAPP_ATTACHMENT:
-                driver.find_element(By.XPATH, whatsapp_variables.attachment_box_xpath).click()
+                try:
+                    attachment_box = driver.find_element(By.XPATH, whatsapp_variables.attachment_box_xpath1).click()
+                except:
+                    attachment_box = driver.find_element(By.XPATH, whatsapp_variables.attachment_box_xpath2).click()
+
                 random_sleep()
                 file_name, file_extension = os.path.splitext(WhatsappConfig.WHATSAPP_ATTACHMENT)
                 if file_extension in whatsapp_variables.allowed_file_ext:
