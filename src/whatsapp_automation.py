@@ -92,7 +92,7 @@ if __name__ == "__main__":
             session.commit()
             random_sleep(5, 10)
             print(f"Message sent to {user.phone}")
-        except Exception as e:
+        except Exception:
             print(f"Invalid Phone number {user.phone}")
             user.status = whatsapp_variables.invalid_status
             user.updated_at = date.today().strftime('%Y-%m-%d')
