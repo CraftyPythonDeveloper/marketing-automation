@@ -23,7 +23,7 @@ WRK_DIR = Path(__file__).parent
 
 @dataclass
 class WhatsappVariables:
-    verify_login_xpath: str = '//div[text()="Unread"]'
+    verify_login_xpath: str = '//*[text()="Unread"]'
     type_here_box: str = "//div[@aria-label='Type a message'] | //div[@aria-placeholder='Type a message']"
     send_msg_xpath: str = "//span[@data-testid='send' or @data-icon='send'] | //div[@aria-label='Send']"
     new_line_delimiter: str = "<br>"
